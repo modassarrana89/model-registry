@@ -56,7 +56,7 @@ jobs:
       - name: Build and Push Image
         shell: bash
         run: |
-           apt-get install -y make
+           sudo apt-get install -y make
            make quay.io/morana/kubeflow/model-registry:latest image/buildx
       - name: Tag Latest
         if: env.BUILD_CONTEXT == 'main'
