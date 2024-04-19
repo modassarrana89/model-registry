@@ -164,7 +164,7 @@ vendor:
 
 .PHONY: build
 build: gen vet lint
-	${GO} build -buildvcs=false
+	GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} ${GO} build -buildvcs=false
 
 .PHONY: build/odh
 build/odh: vet
@@ -176,8 +176,8 @@ gen: deps gen/grpc gen/openapi gen/openapi-server gen/converter
 
 .PHONY: lint
 lint:
-	${GOLANGCI_LINT} run main.go
-	${GOLANGCI_LINT} run cmd/... internal/... ./pkg/...
+	${GOLANGCI_LINT} run main.go  --timeout 5m
+	${GOLANGCI_LINT} run cmd/... internal/... ./pkg/...  --timeout 5m
 
 .PHONY: test
 test: gen
