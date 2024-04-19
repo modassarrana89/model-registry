@@ -57,7 +57,7 @@ jobs:
         shell: bash
         run: |
            sudo apt-get install -y make
-           make quay.io/morana/kubeflow/model-registry:latest image/buildx
+           make IMG_REGISTRY="quay.io/morana" IMG_ORG="${{ env.IMG_ORG }}" IMG_REPO="${{ env.IMG_REPO }}" IMG_VERSION="latest"  image/buildx
       - name: Tag Latest
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
