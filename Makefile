@@ -164,7 +164,7 @@ vendor:
 
 .PHONY: build
 build: gen vet lint
-        ${GO} build -o manager -buildvcs=false
+	${GO} build -o manager -buildvcs=false
 
 .PHONY: build/odh
 build/odh: vet
