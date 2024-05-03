@@ -110,20 +110,20 @@ clean/odh:
 	rm -Rf ./model-registry
 
 bin/go:
-	GOBIN=$(PROJECT_BIN) go install -o go golang.org/dl/go1.19@latest
+	GOBIN=$(PROJECT_BIN) go install golang.org/dl/go1.19@latest
 	$(PROJECT_BIN)/go1.19 download
 
 bin/protoc:
 	./scripts/install_protoc.sh
 
 bin/go-enum:
-	GOBIN=$(PROJECT_BIN) ${GO} install -o go-enum github.com/searKing/golang/tools/go-enum@v1.2.97
+	GOBIN=$(PROJECT_BIN) ${GO} install  github.com/searKing/golang/tools/go-enum@v1.2.97
 
 bin/protoc-gen-go:
-	GOBIN=$(PROJECT_BIN) ${GO} install -o protoc-gen-go google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
+	GOBIN=$(PROJECT_BIN) ${GO} install  google.golang.org/protobuf/cmd/protoc-gen-go@v1.31.0
 
 bin/protoc-gen-go-grpc:
-	GOBIN=$(PROJECT_BIN) ${GO} install -o protoc-gen-go-grpc google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
+	GOBIN=$(PROJECT_BIN) ${GO} install  google.golang.org/grpc/cmd/protoc-gen-go-grpc@v1.3.0
 
 GOLANGCI_LINT ?= ${PROJECT_BIN}/golangci-lint
 bin/golangci-lint:
@@ -131,7 +131,7 @@ bin/golangci-lint:
 
 GOVERTER ?= ${PROJECT_BIN}/goverter
 bin/goverter:
-	GOBIN=$(PROJECT_PATH)/bin ${GO} install -o goverter github.com/jmattheis/goverter/cmd/goverter@v1.1.1
+	GOBIN=$(PROJECT_PATH)/bin ${GO} install  github.com/jmattheis/goverter/cmd/goverter@v1.1.1
 
 OPENAPI_GENERATOR ?= ${PROJECT_BIN}/openapi-generator-cli
 NPM ?= "$(shell which npm)"
