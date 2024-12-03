@@ -19,6 +19,9 @@ env:
   IMG_REPO: model-registry
   DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_PWD: ${{ secrets.DOCKERHUB_TOKEN }}
+  BUILD_PUSH_IMAGE: true # multi-arch image is build and pushed
+  BUILD_IMAGE: false 
+  PUSH_IMAGE: false 
 jobs:
   build-image:
     runs-on: ubuntu-latest
@@ -55,28 +58,12 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD || 'Cgkc6cGY0aAgyqDboVQceocJuH5Vw7CSs+FZ/x4KDYGTTMSun/eTYydqZqSLw3kPpq8HOeDseHPOcAMEQmwJLA=='}}
       - name: Build and Push Image
         shell: bash
-        env:
-          BUILD_PUSH_IMAGE: true # multi-arch image is build and pushed
         run: ./scripts/build_deploy.sh
       - name: Tag Latest
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
-        env:
-          IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
-          BUILD_IMAGE: false #image is already built in "Build and Push Image" step
-          PUSH_IMAGE: true  #Latest Tag image will be pushed
-        run: |
-          docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:latest
-          # BUILD_IMAGE=false skip the build, just push the tag made above
-          VERSION=latest ./scripts/build_deploy.sh
+        run: VERSION=latest ./scripts/build_deploy.sh
       - name: Tag Main
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
-        env:
-          IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
-          BUILD_IMAGE: false # image is already built in "Build and Push Image" step
-          PUSH_IMAGE: true #Main tag image will be pushed 
-        run: |
-          docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:main
-          # BUILD_IMAGE=false skip the build, just push the tag made above
-          VERSION=main ./scripts/build_deploy.sh
+        run: VERSION=main ./scripts/build_deploy.sh
