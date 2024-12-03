@@ -56,8 +56,10 @@ jobs:
           password: ${{ secrets.QUAY_PASSWORD || 'Cgkc6cGY0aAgyqDboVQceocJuH5Vw7CSs+FZ/x4KDYGTTMSun/eTYydqZqSLw3kPpq8HOeDseHPOcAMEQmwJLA=='}}
       - name: Build and Push Image
         shell: bash
+        env:
+          BUILD_PUSH_IMAGE: true # multi-arch image is build and pushed
         run: |
-          BUILD_PUSH_IMAGE=true # multi-arch image is build and pushed 
+          # BUILD_PUSH_IMAGE=true # multi-arch image is build and pushed 
           ./scripts/build_deploy.sh
       - name: Tag Latest
         if: env.BUILD_CONTEXT == 'main'
