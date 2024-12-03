@@ -19,7 +19,6 @@ env:
   IMG_REPO: model-registry
   DOCKER_USER: ${{ secrets.DOCKERHUB_USERNAME }}
   DOCKER_PWD: ${{ secrets.DOCKERHUB_TOKEN }}
-  PUSH_IMAGE: true
 jobs:
   build-image:
     runs-on: ubuntu-latest
@@ -58,15 +57,14 @@ jobs:
         shell: bash
         env:
           BUILD_PUSH_IMAGE: true # multi-arch image is build and pushed
-        run: |
-          # BUILD_PUSH_IMAGE=true # multi-arch image is build and pushed 
-          ./scripts/build_deploy.sh
+        run: ./scripts/build_deploy.sh
       - name: Tag Latest
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
         env:
           IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
-          BUILD_IMAGE: false # image is already built in "Build and Push Image" step
+          BUILD_IMAGE: false #image is already built in "Build and Push Image" step
+          PUSH_IMAGE: true  #Latest Tag image will be pushed
         run: |
           docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:latest
           # BUILD_IMAGE=false skip the build, just push the tag made above
@@ -77,6 +75,7 @@ jobs:
         env:
           IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
           BUILD_IMAGE: false # image is already built in "Build and Push Image" step
+          PUSH_IMAGE: true #Main tag image will be pushed 
         run: |
           docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:main
           # BUILD_IMAGE=false skip the build, just push the tag made above
