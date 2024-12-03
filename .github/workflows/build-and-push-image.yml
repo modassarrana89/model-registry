@@ -63,7 +63,7 @@ jobs:
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
         env:
-          IMG: ${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
+          IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
           BUILD_IMAGE: false # image is already built in "Build and Push Image" step
         run: |
           docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:latest
@@ -73,7 +73,7 @@ jobs:
         if: env.BUILD_CONTEXT == 'main'
         shell: bash
         env:
-          IMG: ${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
+          IMG: quay.io/${{ env.IMG_ORG }}/${{ env.IMG_REPO }}
           BUILD_IMAGE: false # image is already built in "Build and Push Image" step
         run: |
           docker tag ${{ env.IMG }}:$VERSION ${{ env.IMG }}:main
