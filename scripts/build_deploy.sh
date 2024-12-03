@@ -3,11 +3,11 @@
 set -e
 
 # see Makefile for the IMG_ variables semantic
-IMG_REGISTRY=""
-IMG_ORG="${IMG_ORG:-kubeflow}"
+IMG_REGISTRY="quay.io"
+IMG_ORG="${IMG_ORG:-morana/kubeflow}"
 IMG_REPO="${IMG_REPO:-model-registry}"
-DOCKER_USER="${DOCKER_USER}"
-DOCKER_PWD="${DOCKER_PWD}"
+DOCKER_USER="morana"
+DOCKER_PWD="Cgkc6cGY0aAgyqDboVQceocJuH5Vw7CSs+FZ/x4KDYGTTMSun/eTYydqZqSLw3kPpq8HOeDseHPOcAMEQmwJLA=="
 
 # image version
 HASH="$(git rev-parse --short=7 HEAD)"
@@ -43,6 +43,19 @@ if [[ "${SKIP_IF_EXISTING,,}" == "true" && "${IMG_REGISTRY,,}" == "quay.io" ]]; 
     else
         echo "Image does not exist...proceeding with build & push."
     fi
+fi
+
+# build and push container image to registry
+if [[ "${PUSH_IMAGE,,}" == "true" ]]; then
+    echo "Pushing container image.."
+    make \
+        IMG_REGISTRY="${IMG_REGISTRY}" \
+        IMG_ORG="${IMG_ORG}" \
+        IMG_REPO="${IMG_REPO}" \
+        IMG_VERSION="${VERSION}" \
+        image/buildx
+else
+    echo "Skip container image push."
 fi
 
 # build docker image, login is not required at this step
