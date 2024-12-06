@@ -18,8 +18,8 @@ VERSION="${VERSION:-$HASH}"
 BUILD_IMAGE="${BUILD_IMAGE:-true}"
 
 # if set to 0 skip push to registry
-# otherwise push it
-PUSH_IMAGE="${PUSH_IMAGE:-false}"
+# otherwise build and push it
+BUILD_PUSH_IMAGE="${BUILD_PUSH_IMAGE:-false}"
 
 # skip if image already existing on registry
 SKIP_IF_EXISTING="${SKIP_IF_EXISTING:-false}"
@@ -45,19 +45,6 @@ if [[ "${SKIP_IF_EXISTING,,}" == "true" && "${IMG_REGISTRY,,}" == "quay.io" ]]; 
     fi
 fi
 
-# build and push container image to registry
-if [[ "${BUILD_PUSH_IMAGE,,}" == "true" ]]; then
-    echo "Build & Push multi-arch container image.."
-    make \
-        IMG_REGISTRY="${IMG_REGISTRY}" \
-        IMG_ORG="${IMG_ORG}" \
-        IMG_REPO="${IMG_REPO}" \
-        IMG_VERSION="${VERSION}" \
-        image/buildx
-else
-    echo "Skip container image build and push."
-fi
-
 # build docker image, login is not required at this step
 if [[ "${BUILD_IMAGE,,}" == "true" ]]; then
     echo "Building container image.."
@@ -71,18 +58,15 @@ else
     echo "Skip container image build."
 fi
 
-# push container image to registry, requires login
-if [[ "${PUSH_IMAGE,,}" == "true" ]]; then
-    echo "Pushing container image.."
+# build and push container image to registry
+if [[ "${BUILD_PUSH_IMAGE,,}" == "true" ]]; then
+    echo "Build & Push multi-arch container image.."
     make \
         IMG_REGISTRY="${IMG_REGISTRY}" \
         IMG_ORG="${IMG_ORG}" \
         IMG_REPO="${IMG_REPO}" \
         IMG_VERSION="${VERSION}" \
-        DOCKER_USER="${DOCKER_USER}" \
-        DOCKER_PWD="${DOCKER_PWD}" \
-        docker/login \
-        image/push
+        image/buildx
 else
-    echo "Skip container image push."
+    echo "Skip container image build and push."
 fi
