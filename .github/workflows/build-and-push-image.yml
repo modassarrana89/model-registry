@@ -21,7 +21,6 @@ env:
   DOCKER_PWD: ${{ secrets.DOCKERHUB_TOKEN }}
   BUILD_PUSH_IMAGE: true # multi-arch image is build and pushed
   BUILD_IMAGE: false 
-  PUSH_IMAGE: false 
 jobs:
   build-image:
     runs-on: ubuntu-latest
