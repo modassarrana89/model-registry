@@ -1,5 +1,13 @@
 name: Build and Push UI and BFF Images
 on:
+  workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to build from (make sure to use workflow from the same branch).'
+        required: true
+        type: choice
+        options:
+        - 's390x-support'
   push:
     branches:
       - 'main'
